@@ -1,0 +1,89 @@
+.controlsPanel {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    width: 250px;
+    position: absolute;
+    /* Positioning it absolute might cover things? Let's check parent layout. */
+    /* If parent is flex, maybe relative is better. */
+    /* For now, let's assume it sits in a sidebar or overlay. */
+    top: 1rem;
+    right: 1rem;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+    .controlsPanel {
+        position: relative;
+        top: 0;
+        right: 0;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+}
+
+.controlsPanel h3 {
+    margin-bottom: 1rem;
+    color: var(--gold);
+    font-size: 1rem;
+    text-align: center;
+}
+
+.controlGroup {
+    margin-bottom: 1rem;
+}
+
+.controlGroup label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.inputRow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.inputRow input {
+    flex: 1;
+    accent-color: var(--accent);
+}
+
+.inputRow span {
+    width: 40px;
+    text-align: right;
+    font-size: 0.9rem;
+    font-family: monospace;
+}
+
+.toggleRow {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.toggleRow button {
+    flex: 1;
+    padding: 0.4rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ccc;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+}
+
+.toggleRow button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.toggleRow button.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+}

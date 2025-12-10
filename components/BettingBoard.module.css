@@ -1,0 +1,226 @@
+.boardWrapper {
+    padding: 1rem;
+    width: 100%;
+    max-width: 800px;
+    overflow-x: auto;
+    /* Allow scrolling on small screens if needed */
+}
+
+@media (max-width: 600px) {
+    .boardWrapper {
+        padding: 0.5rem;
+    }
+
+    /* Scale down the board slightly? Or just scroll. 
+     Scroll is better for usability than tiny cells. */
+}
+
+.board {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    grid-template-rows: auto auto auto;
+    /* Numbers, Dozens, Bottom */
+    gap: 5px;
+}
+
+.zero {
+    grid-column: 1;
+    grid-row: 1 / span 1;
+    /* Actually span the height of the numbers grid (3 rows) */
+    /* Wait, numbersGrid is a separate div now? */
+    /* Yes. We need to rethink structure or use subgrid. */
+    /* Let's adjust styles for the structure in JS: 
+     <div board>
+       <div zero>
+       <div numbersGrid> (contains 3 rows)
+       <div dozens>
+       <div bottomBets>
+  */
+
+    /* To make Zero span the height of Numbers Grid, we can place them side by side */
+    /* But Dozens and Bottom Bets need to align with Numbers Grid columns */
+}
+
+/* Let's use flex for the top part (Zero + Numbers) */
+.board {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.topSection {
+    display: flex;
+    gap: 4px;
+}
+
+/* But wait, I didn't wrap Zero and Numbers in a topSection in JS. 
+   I put them as siblings in board. 
+   I need to update JS or use Grid for the whole board.
+   Let's update CSS to use Grid efficiently.
+*/
+.board {
+    display: grid;
+    grid-template-columns: 50px repeat(12, 1fr) 50px;
+    grid-template-areas:
+        "zero num num num num num num num num num num num num col"
+        "zero num num num num num num num num num num num num col"
+        "zero num num num num num num num num num num num num col"
+        "empty doz doz doz doz doz doz doz doz doz doz doz doz empty2"
+        "empty bot bot bot bot bot bot bot bot bot bot bot bot empty2";
+    /* This implies flat children. But I have nested children. */
+    /* So I should probably use CSS Grid on the PARENT and display:contents on containers 
+     OR rewrite JS to flatten structure.
+     Or just use Flexbox rows.
+  */
+}
+
+/* Let's go with Flexbox for Rows. easier for nested structure */
+/* Update: I will just use custom layout without strict Grid Area if structure is nested. */
+/* Current JS structure:
+   - board
+     - zero
+     - numbersGrid (div) -> rows -> cells
+     - dozens
+     - bottomBets
+*/
+
+/* We can float Zero left? No. Flex. */
+/* Let's changing .board to use Grid won't work easily with nested divs unless I use display: contents */
+
+.board {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 4px;
+}
+
+.zero {
+    grid-row: 1;
+    grid-column: 1;
+    background-color: var(--felt-green);
+    border: 2px solid white;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+    border-radius: 4px 0 0 4px;
+    /* Zero height: needs to match numbersGrid height */
+    /* If numbersGrid has 3 rows of X height */
+    height: 100%;
+    /* If wrapper has height? */
+}
+
+.numbersGrid {
+    grid-row: 1;
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.row {
+    display: flex;
+    gap: 4px;
+}
+
+.cell {
+    background-color: var(--felt-green);
+    /* Default fallback */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    min-height: 50px;
+}
+
+.cell:hover {
+    filter: brightness(1.3);
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.4);
+}
+
+.numberCell {
+    width: 50px;
+    /* Base width */
+    flex: 1;
+    font-size: 1.2rem;
+}
+
+.red {
+    background-color: var(--red-roulette);
+}
+
+.black {
+    background-color: var(--black-roulette);
+}
+
+.columnBet {
+    width: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: transparent;
+    font-size: 0.9rem;
+}
+
+.dozens {
+    grid-column: 2;
+    display: flex;
+    gap: 4px;
+    margin-top: 4px;
+    /* Needs to align with numbers. numbersGrid width is (12 * cell + 1 * colBet) */
+    /* Dozens cover 4 cells each. */
+    /* We have 12 number columns. */
+}
+
+.dozen {
+    flex: 4;
+    /* Span 4 number cells */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 10px 0;
+    /* Need to ensure it doesn't span the ColumnBet space */
+    /* Actually, Dozens align with the 12 columns only. The Column bet is extra. */
+    /* So `.dozens` container width != `.numbersGrid` width? */
+    /* We can make dozens container width match the 12 cols. */
+    margin-right: 54px;
+    /* Space for the column bet column (50px + gap) */
+}
+
+.bottomBets {
+    grid-column: 2;
+    display: flex;
+    gap: 4px;
+    margin-top: 4px;
+    margin-right: 54px;
+    /* Same margin */
+}
+
+.outside {
+    flex: 1;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 10px 0;
+    font-size: 1rem;
+}
+
+.redDiamond,
+.blackDiamond {
+    font-size: 0;
+    /* Hide text */
+}
+
+.redDiamondShape {
+    width: 20px;
+    height: 20px;
+    background: var(--red-roulette);
+    transform: rotate(45deg);
+}
+
+.blackDiamondShape {
+    width: 20px;
+    height: 20px;
+    background: var(--black-roulette);
+    transform: rotate(45deg);
+}
