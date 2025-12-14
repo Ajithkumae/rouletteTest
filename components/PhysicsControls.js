@@ -28,6 +28,51 @@ export default function PhysicsControls({ config, onConfigChange, onManualRotate
             </div>
 
             <div className={styles.controlGroup}>
+                <label>Tilt Angle (°)</label>
+                <div className={styles.inputRow}>
+                    <input
+                        type="range"
+                        min="0"
+                        max="10"
+                        step="0.5"
+                        value={config.tiltAngle || 0}
+                        onChange={(e) => handleChange('tiltAngle', parseFloat(e.target.value))}
+                    />
+                    <span>{config.tiltAngle || 0}°</span>
+                </div>
+            </div>
+
+            <div className={styles.controlGroup}>
+                <label>Bounciness</label>
+                <div className={styles.inputRow}>
+                    <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.1"
+                        value={config.restitution || 0.5}
+                        onChange={(e) => handleChange('restitution', parseFloat(e.target.value))}
+                    />
+                    <span>{config.restitution || 0.5}</span>
+                </div>
+            </div>
+
+            <div className={styles.controlGroup}>
+                <label>Chaos (Scatter)</label>
+                <div className={styles.inputRow}>
+                    <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.1"
+                        value={config.scatter || 0.5}
+                        onChange={(e) => handleChange('scatter', parseFloat(e.target.value))}
+                    />
+                    <span>{config.scatter || 0.5}</span>
+                </div>
+            </div>
+
+            <div className={styles.controlGroup}>
                 <label>Wheel Direction</label>
                 <div className={styles.toggleRow}>
                     <button

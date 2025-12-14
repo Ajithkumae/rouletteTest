@@ -1,12 +1,13 @@
 'use client';
 
-'use client';
+
 
 import { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import RouletteWheel from '@/components/RouletteWheel';
 import BettingBoard from '@/components/BettingBoard';
-import PhysicsControls from '@/components/PhysicsControls';
+import SettingsModal from '@/components/SettingsModal';
+
 import { getNumberColorVar } from '@/utils/roulette';
 
 export default function Home() {
@@ -26,6 +27,12 @@ export default function Home() {
     ballSpins: 3, // Extra spins relative to wheel
     ballDirection: 1 // 1 CW (opposite to wheel usually), -1 CCW
   });
+
+
+
+  const [wheelRPM, setWheelRPM] = useState(20);
+  const [ballRPM, setBallRPM] = useState(105);
+  const [showSettings, setShowSettings] = useState(false);
 
   const [selectedSpin, setSelectedSpin] = useState(null);
 
@@ -64,14 +71,6 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      <PhysicsControls
-        config={physicsConfig}
-        onConfigChange={setPhysicsConfig}
-        onManualRotate={(dWheel, dBall) => {
-          setWheelRotation(prev => prev + dWheel);
-          setBallRotation(prev => prev + dBall);
-        }}
-      />
       {/* <div className={styles.header}>
         <h1>Roulette Royale</h1>
         <div className={styles.stats}>
@@ -89,10 +88,35 @@ export default function Home() {
 
 
       <div className={styles.gameArea}>
+        <div style={{ padding: '10px', textAlign: 'right' }}>
+          <button
+            onClick={() => setShowSettings(true)}
+            style={{
+              padding: '8px 16px',
+              backgroundColor: '#1a1a1a',
+              color: '#daa520',
+              border: '1px solid #daa520',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              fontSize: '1rem'
+            }}
+          >
+            ⚙ SETTINGS
+          </button>
+        </div>
+
+        <SettingsModal
+          isOpen={showSettings}
+          onClose={() => setShowSettings(false)}
+          wheelRPM={wheelRPM}
+          setWheelRPM={setWheelRPM}
+          ballRPM={ballRPM}
+          setBallRPM={setBallRPM}
+        />
         <div className={styles.wheelContainer}>
           <RouletteWheel
             onSpinComplete={handleSpinComplete}
-            physicsConfig={physicsConfig}
+            physicsConfig={{ ...physicsConfig, wheelRPM, ballRPM }}
             rotation={wheelRotation}
             setRotation={setWheelRotation}
             ballRotation={ballRotation}
